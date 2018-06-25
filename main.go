@@ -80,7 +80,26 @@ func init() {
 // can be found, returns an error.
 func detectMTU(links []netlink.Link) (int, error) {
 	log.Debug("Autodetecting MTU")
-	return 0, fmt.Errorf("not implemented")
+
+	mtu := pkgMTU.MaxMTU
+	foundDevice := false
+	for _, link := range links {
+		if link.Type() != "device" {
+			continue
+		}
+		foundDevice = true
+		attrs := link.Attrs()
+		if attrs.MTU < mtu {
+			log.Debugf("Link %s forces lower MTU %d",
+				attrs.Name, attrs.MTU)
+			mtu = attrs.MTU
+		}
+	}
+	if !foundDevice {
+		return 0, fmt.Errorf("no physical devices found")
+	}
+
+	return mtu, nil
 }
 
 // sanitizeMTU takes the specified MTU and an optional set of links, and
