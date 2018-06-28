@@ -154,8 +154,9 @@ func updateNamespaceMTU(deviceMTU, tunnelMTU int, epInfo *endpointInfo) (bool, e
 // and attempts to update the device and route MTU in those namespaces if
 // their primary device IPs can be found in 'epInfo'.
 //
+// Returns the number of namespaces that were not updated as the first result.
 // Returns an error only if an error occurs while fetching namespaces.
-func updateNamespaces(deviceMTU, tunnelMTU int, epInfo *endpointInfo) error {
+func updateNamespaces(deviceMTU, tunnelMTU int, epInfo *endpointInfo) (int, error) {
 	var (
 		skipped int
 		failed  int
@@ -164,7 +165,7 @@ func updateNamespaces(deviceMTU, tunnelMTU int, epInfo *endpointInfo) error {
 
 	rootNamespace, namespaces, err := scanNamespaces()
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	// Set routes and device MTUs inside the network namespaces
@@ -204,5 +205,5 @@ func updateNamespaces(deviceMTU, tunnelMTU int, epInfo *endpointInfo) error {
 	log.Infof("Updated %d/%d namespaces, %d skipped, %d failed",
 		updated, len(namespaces), skipped, failed)
 
-	return nil
+	return failed, nil
 }

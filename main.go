@@ -157,9 +157,12 @@ func run(cmd *cobra.Command) {
 		deviceMTU, tunnelMTU)
 
 	// Perform the actual MTU update
-	err = updateNamespaces(deviceMTU, tunnelMTU, epInfo)
+	failed, err := updateNamespaces(deviceMTU, tunnelMTU, epInfo)
 	if err != nil {
 		log.WithError(err).Fatalf("Failed to find network namespaces")
 	}
-	updateHostLinks(allLinks, deviceMTU, epInfo)
+	failed += updateHostLinks(allLinks, deviceMTU, epInfo)
+	if failed > 0 {
+		log.Fatalf("%d MTU update operations failed", failed)
+	}
 }
