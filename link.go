@@ -86,7 +86,11 @@ func getPrimaryLink() (*linkInfo, error) {
 	return nil, fmt.Errorf("failed to find primary link in %+v", links)
 }
 
-func updateHostLinks(allLinks []netlink.Link, deviceMTU int, epInfo *endpointInfo) {
+// updateHostLinks sets the MTU for links in the host namespace, both for host
+// side of veths that containers use, and the cilium devices.
+//
+// Returns the number of updates that failed.
+func updateHostLinks(allLinks []netlink.Link, deviceMTU int, epInfo *endpointInfo) int {
 	log.Debug("Updating host namespace devices")
 	var (
 		skipped int
@@ -140,4 +144,5 @@ func updateHostLinks(allLinks []netlink.Link, deviceMTU int, epInfo *endpointInf
 
 	log.Infof("Updated %d/%d local devices, %d skipped, %d failed",
 		updated, len(allLinks), skipped, failed)
+	return failed
 }
