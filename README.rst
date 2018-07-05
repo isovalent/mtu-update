@@ -1,30 +1,30 @@
 Usage
 -----
 
-```
-$ ./mtu-update -h
-Update the MTU inside network namespaces.
+.. code-block:: shell-session
 
-Usage:
-  mtu-update [flags]
+    $ ./mtu-update -h
+    Update the MTU inside network namespaces.
 
-Flags:
-  -h, --help                  help for mtu-update
-  -m, --mtu int               Base MTU to configure on links (0 for autodetect) (default 1500)
-  -t, --tunnel-overhead int   Expected tunnel overhead for overlay traffic (default 50)
-  -v, --verbose               Print verbose debug log messages
-```
+    Usage:
+      mtu-update [flags]
+
+    Flags:
+      -h, --help                  help for mtu-update
+      -m, --mtu int               Base MTU to configure on links (0 for autodetect) (default 1500)
+      -t, --tunnel-overhead int   Expected tunnel overhead for overlay traffic (default 50)
+      -v, --verbose               Print verbose debug log messages
 
 Update the MTU across a k8s cluster:
 
-```
-$ kubectl create -f https://raw.githubusercontent.com/cilium/mtu-update/master/mtu-update.yaml
-$ kubectl get ds mtu-update -n kube-system
-NAME         DESIRED   CURRENT   READY     UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
-mtu-update   1         1         1         1            1           <none>          18s
-(Try again until all pods are ready)
-$ kubectl delete -f https://raw.githubusercontent.com/cilium/mtu-update/master/mtu-update.yaml
-```
+.. code-block:: shell-session
+
+    $ kubectl create -f https://raw.githubusercontent.com/cilium/mtu-update/master/mtu-update.yaml
+    $ kubectl get ds mtu-update -n kube-system
+    NAME         DESIRED   CURRENT   READY     UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+    mtu-update   1         1         1         1            1           <none>          18s
+    (Try again until all pods are ready)
+    $ kubectl delete -f https://raw.githubusercontent.com/cilium/mtu-update/master/mtu-update.yaml
 
 Contact
 -------
