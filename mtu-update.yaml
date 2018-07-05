@@ -19,7 +19,7 @@ spec:
     spec:
       serviceAccountName: cilium
       containers:
-      - image: docker.io/cilium/update-mtu:v1.0
+      - image: docker.io/cilium/update-mtu:v1.1
         imagePullPolicy: IfNotPresent
         name: mtu-update
         command: [ "/bin/sh" ]
